@@ -8,7 +8,7 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
-app.use("/", blogRoutes);
+app.use(blogRoutes);
 
 mongoose
   .connect(config.db.url || "")

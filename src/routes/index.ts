@@ -1,16 +1,14 @@
 import express from "express";
+import ArticleRoute from './Article';
 
 const router = express.Router();
 
-router.get("/", (req, res) => {
+router.get("/", (_req, res) => {
   res.status(200).json({
     message: "Application Deployed",
   });
 });
 
-router.get("/blogs", (_req, res) => {
-  res.send("/blog-post");
-});
-// Add more routes as needed
+router.use("/articles", ArticleRoute);
 
 export default router;
