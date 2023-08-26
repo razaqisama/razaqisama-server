@@ -2,13 +2,15 @@ import "dotenv/config";
 import express from "express";
 import mongoose from "mongoose";
 import { config } from "./config";
-import blogRoutes from "./routes";
+import errorHandler from "./middlewares/errorHandler";
+import routes from "./routes";
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
-app.use(blogRoutes);
+app.use(routes);
+app.use(errorHandler);
 
 mongoose
   .connect(config.db.url || "")

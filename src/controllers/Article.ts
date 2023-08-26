@@ -1,21 +1,23 @@
-import { Request, Response } from 'express';
+import { ErrorHandle, NotFoundError } from '../middlewares/errorHandler';
+import { NextFunction, Request, Response } from 'express';
 import ArticleModel, { Article } from '../models/Article';
 
 class Controllers {
-  static async getAll (_req: Request, res: Response) {
+  static async getAll (_req: Request, res: Response, next: NextFunction) {
     try {
       const articles = await ArticleModel.find();
       res.status(200).json(articles);
     } catch (error) {
-      res.status(500).json({ message: 'Internal server error' });
+      return next();
     }
   };
 
-  static async createOne (req: Request, res: Response) {
+  static async createOne (req: Request, res: Response, next: NextFunction) {
     const { title, content } = req.body;
 
     if (!title || !content) {
-      return res.status(400).json({ message: 'Title and content are required' });
+      const err = new ErrorHandle('Title and content are required', 400);
+      return next(err);
     }
 
     try {
@@ -27,16 +29,17 @@ class Controllers {
       const savedArticle = await newArticle.save();
       res.status(201).json(savedArticle);
     } catch (error) {
-      res.status(500).json({ message: 'Internal server error' });
+      return next();
     }
   };
 
-  static async updateOne(req: Request, res: Response) {
+  static async updateOne(req: Request, res: Response, next: NextFunction) {
     const { id } = req.params;
     const { title, content } = req.body;
 
     if (!title || !content) {
-      return res.status(400).json({ message: 'Title and content are required' });
+      const err = new ErrorHandle('Title and content are required', 400);
+      next(err);
     }
 
     try {
@@ -47,28 +50,30 @@ class Controllers {
       );
 
       if (!updatedArticle) {
-        return res.status(404).json({ message: 'Article not found' });
+        const err = new NotFoundError('Article not found');
+        return next(err);
       }
 
       res.status(200).json(updatedArticle);
     } catch (error) {
-      res.status(500).json({ message: 'Internal server error' });
+      next();
     }
   }
 
-  static async deleteOne(req: Request, res: Response) {
+  static async deleteOne(req: Request, res: Response, next: NextFunction) {
     const { id } = req.params;
 
     try {
       const deletedArticle = await ArticleModel.findByIdAndDelete(id);
 
       if (!deletedArticle) {
-        return res.status(404).json({ message: 'Article not found' });
+        const err = new NotFoundError('Article not found');
+        return next(err);
       }
 
       res.status(200).json({ message: 'Article deleted successfully' });
     } catch (error) {
-      res.status(500).json({ message: 'Internal server error' });
+      return next();
     }
   }
 }
