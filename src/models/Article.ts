@@ -6,8 +6,8 @@ export interface Article extends Document {
 }
 
 const ArticleSchema = new Schema<Article>({
-  title: String,
-  content: String,
+  title: { type: String, required: true },
+  content: { type: String, required: true },
 });
 
 export default mongoose.model<Article>('Article', ArticleSchema);

@@ -7,9 +7,13 @@ import routes from "./routes";
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+const router = express.Router();
 
 app.use(express.json());
-app.use(routes);
+app.use('/', router.get('/', (_req, res) => {
+  res.send('Server is up');
+}));
+app.use('/api/v1', routes);
 app.use(errorHandler);
 
 mongoose

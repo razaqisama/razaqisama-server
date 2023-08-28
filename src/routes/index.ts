@@ -1,14 +1,10 @@
 import express from "express";
 import ArticleRoute from './Article';
+import UserRoute from './User';
 
 const router = express.Router();
 
-router.get("/", (_req, res) => {
-  res.status(200).json({
-    message: "Application Deployed",
-  });
-});
-
 router.use("/articles", ArticleRoute);
+router.use("/users", UserRoute);
 
 export default router;
