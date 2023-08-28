@@ -1,6 +1,6 @@
 import { ErrorHandle, NotFoundError } from '../middlewares/errorHandler';
 import { NextFunction, Request, Response } from 'express';
-import ArticleModel, { Article } from '../models/Article';
+import { ArticleModel, Article } from '../models';
 
 class Controllers {
   static async getAll (_req: Request, res: Response, next: NextFunction) {

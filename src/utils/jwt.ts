@@ -4,8 +4,8 @@ function generateToken(payload: Record<string, any>, options: SignOptions = {}):
   return jwt.sign(payload, process.env.JWT_SECRET || '', options);
 }
 
-function verifyToken(token: string): string | JwtPayload {
-  return jwt.verify(token, process.env.JWT_SECRET || '');
+function verifyToken(token: string): JwtPayload {
+  return jwt.verify(token, process.env.JWT_SECRET || '') as JwtPayload;
 }
 
 export {

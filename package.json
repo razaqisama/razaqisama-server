@@ -7,7 +7,7 @@
     "start": "ts-node ./src/app.ts",
     "start:prod": "npm run build && node ./dist/src/app.js",
     "build": "npx tsc",
-    "dev": "./node_modules/nodemon/bin/nodemon.js"
+    "dev": "nodemon --ext ts --delay 100ms src/app.ts"
   },
   "keywords": [],
   "author": "",

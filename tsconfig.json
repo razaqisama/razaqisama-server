@@ -6,8 +6,11 @@
     "rootDir": "./src",
     "strict": true,
     "esModuleInterop": true,
+    "baseUrl": "./",
     "paths": {
-      "@/*": ["./src/*"]
-    }
-  }
+      "@/*": ["src/*"]
+    },
+  },
+  "include": ["**/*.ts"],
+  "exclude": ["node_modules"]
 }
