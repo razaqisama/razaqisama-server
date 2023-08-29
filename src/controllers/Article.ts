@@ -1,6 +1,7 @@
 import { ErrorHandle, NotFoundError } from '../middlewares/errorHandler';
 import { NextFunction, Request, Response } from 'express';
 import { ArticleModel, Article } from '../models';
+import { convertToSlug } from '../utils/convertToSlug';
 
 class Controllers {
   static async getAll (_req: Request, res: Response, next: NextFunction) {
@@ -12,7 +13,22 @@ class Controllers {
     }
   };
 
-  static async createOne (req: Request, res: Response, next: NextFunction) {
+  static async findOneBySlug (req: Request, res: Response, next: NextFunction) {
+    const { slug } = req.params;
+
+    try {
+      const article = await ArticleModel.findOne({ slug });
+
+      if (!article) {
+        return res.status(404).json({ message: 'Article not found' });
+      }
+      res.status(200).json(article);
+    } catch (error) {
+      return next();
+    }
+  };
+
+  static async createOne (req: Request, res: Response, next: NextFunction) {  
     const { title, content } = req.body;
 
     if (!title || !content) {
@@ -24,11 +40,14 @@ class Controllers {
       const newArticle: Article = new ArticleModel({
         title,
         content,
+        slug: convertToSlug(title),
       });
   
       const savedArticle = await newArticle.save();
       res.status(201).json(savedArticle);
     } catch (error) {
+      console.log(error);
+
       return next();
     }
   };

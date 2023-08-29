@@ -1,4 +1,5 @@
 import "dotenv/config";
+import cors from 'cors';
 import express from "express";
 import mongoose from "mongoose";
 import { config } from "./config";
@@ -9,6 +10,7 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 const router = express.Router();
 
+app.use(cors());
 app.use(express.json());
 app.use('/', router.get('/', (_req, res) => {
   res.send('Server is up');
